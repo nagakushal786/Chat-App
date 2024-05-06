@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="client.css">
+    <title>Chat App</title>
+  </head>
+  <body>
+    <h1 id="head">Chat App</h1>
+    <div class="chat-container">
+      <div id="message-list">
+        <!-- List will contain messages -->
+      </div>
+    </div>
+    <input type="text" id="message-input">
+    <button id="send-message">Send</button>
+    <script src="http://localhost:3000/socket.io/socket.io.js"></script>
+    <script>
+      // socket code in JS
+      const socket=io.connect("http://localhost:3000");
+      const username=prompt("Enter your name");
+      // Emit the username to the server
+      socket.emit('new_user', username);
+
+      const messageInput=document.getElementById('message-input');
+      const messageList=document.getElementById('message-list');
+      const sendButton=document.getElementById('send-message');
+
+      sendButton.addEventListener('click', ()=>{
+        // 1. Read the message from input and send to the server
+        const message=messageInput.value;
+        if(message){
+          socket.emit('new_message', message);
+
+          // Add this message to the message list
+          const messageElement=document.createElement('div');
+          messageElement.innerText=username+": "+message;
+          messageList.appendChild(messageElement);
+
+          // Clear the input
+          messageInput.value="";
+        }
+      });
+
+      // Display messages on UI
+      socket.on('load_messages', (messages)=>{
+        messages.forEach(message => {
+          const messageElement=document.createElement('div');
+          messageElement.innerText=new Date(message.timestamp).toDateString()+" - "+message.username+": "+message.message;
+          messageList.appendChild(messageElement);
+        });
+      })
+
+      // Listen for the broadcast message and add to the list
+      socket.on('broadcast_message', (userMessage)=>{
+        console.log(userMessage);
+        const messageElement=document.createElement('div');
+        messageElement.innerText=userMessage.username+": "+userMessage.message;
+        messageList.appendChild(messageElement);
+      });
+    </script>
+  </body>
+</html>
