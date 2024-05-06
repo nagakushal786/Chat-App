@@ -1,0 +1,15 @@
+Socket Programming:
+1. Real time interactions
+2. Lower latancies
+3. Enhanced user experience
+
+Appliactions:
+1. Chat applications
+2. Notifications
+3. Live updates
+4. Google docs
+
+Disadvantages:
+1. Security restrictions
+2. Increased complexity
+3. Difficult to maintain
