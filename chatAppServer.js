@@ -2,8 +2,8 @@ import express from "express";
 import { Server } from "socket.io";
 import cors from "cors";
 import http from "http";
-import {connect} from "./chatApp/config.js";
-import { chatModel } from "./chatApp/chat.schema.js";
+import {connect} from "./config.js";
+import { chatModel } from "./chat.schema.js";
 
 const app=express();
 
